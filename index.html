@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AYALA - Plateforme Sociale Propulsée par Danny OYO-AYALA</title>
+
+  <!-- PWA & Mobile Meta Tags -->
+  <meta name="theme-color" content="#009543">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="AYALA - La première super-app sociale africaine. Messagerie, Réels, Lives, Fil d'actualité. Propulsée par Danny OYO-AYALA.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ayala: {
+              green: '#009543',
+              yellow: '#FBDE4A',
+              red: '#DC241F',
+              dark: '#0B0F17',
+              card: '#151C28',
+              border: '#232D3F',
+              accent: '#00B853'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Phosphor Icons CDN for Social Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Custom Styles for Smooth Animations & Glassmorphism -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    body {
+      font-family: 'Inter', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #009543;
+      border-radius: 9999px;
+    }
+
+    /* Heart pulse for Live animations */
+    @keyframes heartFloat {
+      0% { transform: translateY(0) scale(0.8); opacity: 1; }
+      50% { opacity: 0.9; }
+      100% { transform: translateY(-120px) scale(1.4); opacity: 0; }
+    }
+    .heart-animation {
+      position: absolute;
+      animation: heartFloat 2s ease-out forwards;
+      pointer-events: none;
+    }
+
+    /* Shimmer effect for splash screen */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .shimmer-text {
+      background: linear-gradient(90deg, #FBDE4A 0%, #FFFFFF 50%, #FBDE4A 100%);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      animation: shimmer 3s linear infinite;
+    }
+
+    .flag-gradient {
+      background: linear-gradient(135deg, #009543 0%, #FBDE4A 50%, #DC241F 100%);
+    }
+
+    .flag-border {
+      border-image: linear-gradient(to right, #009543, #FBDE4A, #DC241F) 1;
+    }
+
+    /* Hide scrollbars for story reels */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+
+  <!-- PWA Manifest Inline Data URL -->
+  <link rel="manifest" href='data:application/manifest+json,{"name":"AYALA Social App","short_name":"AYALA","start_url":".","display":"standalone","background_color":"#0B0F17","theme_color":"#009543","icons":[{"src":"https://placehold.co/192x192/009543/ffffff?text=AYALA","sizes":"192x192","type":"image/png"}]}'>
+</head>
+
+<body class="h-full bg-ayala-dark text-slate-100 flex flex-col justify-between select-none">
+
+  <!-- SPLASH SCREEN -->
+  <div id="splashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-between p-8 bg-slate-950 transition-opacity duration-700">
+    <div class="flex-1 flex flex-col items-center justify-center text-center">
+      <!-- Tricolor Circular Logo -->
+      <div class="relative w-36 h-36 rounded-full flag-gradient p-1.5 shadow-2xl shadow-ayala-green/40 mb-6 animate-pulse">
+        <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center flex-col p-2">
+          <span class="text-4xl font-black tracking-widest text-ayala-red font-black">AYALA</span>
+          <div class="w-12 h-1 bg-ayala-yellow rounded-full my-1"></div>
+          <span class="text-[10px] text-ayala-green tracking-wider font-semibold uppercase">SOCIAL APP</span>
+        </div>
+      </div>
+      
+      <h1 class="text-3xl font-extrabold tracking-tight text-white mb-2">
+        Bienvenue sur <span class="text-ayala-red">AYALA</span>
+      </h1>
+      <p class="text-slate-400 text-sm max-w-xs">
+        La première grande plateforme sociale connectée du Congo & d'Afrique.
+      </p>
+    </div>
+
+    <!-- Creator Branding -->
+    <div class="text-center pb-6">
+      <p class="text-xs text-slate-500 font-medium tracking-wide uppercase mb-1">Plateforme Officielle</p>
+      <div class="inline-flex items-center space-x-2 bg-slate-900/80 px-4 py-2 rounded-full border border-ayala-border shadow-lg">
+        <span class="w-2.5 h-2.5 rounded-full bg-ayala-green animate-ping"></span>
+        <p class="text-xs font-bold text-slate-200">
+          Propulsé par <span class="text-ayala-red uppercase tracking-wider font-extrabold">Danny OYO-AYALA</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <div id="appContainer" class="flex-1 flex flex-col h-full max-w-md mx-auto w-full bg-slate-950 border-x border-slate-800 shadow-2xl relative overflow-hidden">
+
+    <!-- TOP HEADER -->
+    <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-md border-b border-ayala-border px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-full flag-gradient p-0.5 flex items-center justify-center">
+          <div class="w-full h-full bg-slate-950 rounded-full flex items-center justify-center">
+            <span class="text-xs font-black text-ayala-red">A</span>
+          </div>
+        </div>
+        <div>
+          <span class="text-xl font-black text-ayala-red tracking-wider">AYALA</span>
+          <span class="text-[9px] bg-ayala-green/20 text-ayala-green px-1.5 py-0.5 rounded font-bold ml-1 border border-ayala-green/30">PRO</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-3">
+        <button onclick="openModal('createPostModal')" class="p-2 rounded-full bg-ayala-green/10 text-ayala-green hover:bg-ayala-green/20 transition-all">
+          <i class="ph-bold ph-plus-circle text-xl"></i>
+        </button>
+        <button onclick="openModal('premiumModal')" class="flex items-center space-x-1 px-3 py-1.5 rounded-full bg-gradient-to-r from-ayala-yellow to-amber-500 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20">
+          <i class="ph-fill ph-crown text-sm"></i>
+          <span>VIP</span>
+        </button>
+        <button onclick="switchTab('chats')" class="relative p-2 rounded-full bg-slate-900 text-slate-300 hover:text-white">
+          <i class="ph-bold ph-chat-circle-dots text-xl"></i>
+          <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-ayala-red rounded-full border-2 border-slate-950"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT VIEWS CONTAINER -->
+    <main class="flex-1 overflow-y-auto relative no-scrollbar pb-20">
+
+      <!-- 1. FEED TAB -->
+      <section id="tab-feed" class="tab-content block p-4 space-y-4">
+        
+        <!-- STORIES ROW -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Statuts & Stories</h2>
+            <span class="text-xs text-ayala-green font-semibold cursor-pointer">Voir tout</span>
+          </div>
+          <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1">
+            <!-- Add Story -->
+            <div onclick="triggerAddStory()" class="flex-shrink-0 w-16 flex flex-col items-center cursor-pointer">
+              <div class="relative w-14 h-14 rounded-full bg-slate-900 border-2 border-dashed border-ayala-green flex items-center justify-center">
+                <i class="ph-bold ph-camera text-ayala-green text-xl"></i>
+                <div class="absolute bottom-0 right-0 w-5 h-5 bg-ayala-red text-white rounded-full flex items-center justify-center text-xs font-bold border-2 border-slate-950">+</div>
+              </div>
+              <span class="text-[11px] text-slate-300 font-medium mt-1 truncate w-full text-center">Ma story</span>
+            </div>
+
+            <!-- Demo Stories -->
+            <div onclick="viewStory('Danny OYO-AYALA', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80')" class="flex-shrink-0 w-16 flex flex-col items-center cursor-pointer">
+              <div class="w-14 h-14 rounded-full p-0.5 flag-gradient">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full border-2 border-slate-950" alt="Story">
+              </div>
+              <span class="text-[11px] text-ayala-red font-bold mt-1 truncate w-full text-center">Danny OYO</span>
+            </div>
+
+            <div onclick="viewStory('Grace M.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80')" class="flex-shrink-0 w-16 flex flex-col items-center cursor-pointer">
+              <div class="w-14 h-14 rounded-full p-0.5 bg-ayala-yellow">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" class="w-full h-full object-cover rounded-full border-2 border-slate-950" alt="Story">
+              </div>
+              <span class="text-[11px] text-ayala-red font-bold mt-1 truncate w-full text-center">Grace M.</span>
+            </div>
+
+            <div onclick="viewStory('Prince Brazza', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80')" class="flex-shrink-0 w-16 flex flex-col items-center cursor-pointer">
+              <div class="w-14 h-14 rounded-full p-0.5 bg-ayala-green">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&q=80" class="w-full h-full object-cover rounded-full border-2 border-slate-950" alt="Story">
+              </div>
+              <span class="text-[11px] text-ayala-red font-bold mt-1 truncate w-full text-center">Prince B.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- POST INPUT TRIGGER -->
+        <div onclick="openModal('createPostModal')" class="bg-slate-900/80 border border-ayala-border rounded-2xl p-3 flex items-center space-x-3 cursor-pointer hover:border-ayala-green transition-all">
+          <div class="w-10 h-10 rounded-full flag-gradient p-0.5">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full" alt="Mon Profil">
+          </div>
+          <span class="text-sm text-slate-400 font-medium">Quoi de neuf aujourd'hui ?</span>
+          <div class="ml-auto text-ayala-green flex items-center space-x-2">
+            <i class="ph-bold ph-image text-lg"></i>
+            <i class="ph-bold ph-video-camera text-lg"></i>
+          </div>
+        </div>
+
+        <!-- FEED POSTS LIST CONTAINER -->
+        <div id="postsContainer" class="space-y-4">
+          <!-- Dynamic posts will render here -->
+        </div>
+      </section>
+
+      <!-- 2. REELS / SHORT VIDEOS TAB -->
+      <section id="tab-reels" class="tab-content hidden h-full relative bg-black">
+        <div id="reelsContainer" class="h-[calc(100vh-140px)] w-full overflow-y-snap snap-y snap-mandatory relative">
+          
+          <!-- Reel Item 1 -->
+          <div class="snap-start w-full h-full relative flex items-center justify-center bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-80" alt="Reel Video">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90"></div>
+
+            <!-- Overlay Actions -->
+            <div class="absolute right-3 bottom-20 flex flex-col items-center space-y-6 z-10">
+              <button onclick="toggleReelLike(this)" class="flex flex-col items-center text-white">
+                <div class="w-12 h-12 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center text-2xl hover:text-ayala-red">
+                  <i class="ph-bold ph-heart"></i>
+                </div>
+                <span class="text-xs font-bold mt-1">45.2K</span>
+              </button>
+              
+              <button onclick="openCommentsModal('Reel_1')" class="flex flex-col items-center text-white">
+                <div class="w-12 h-12 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center text-2xl">
+                  <i class="ph-bold ph-chat-circle text-white"></i>
+                </div>
+                <span class="text-xs font-bold mt-1">1.2K</span>
+              </button>
+
+              <button onclick="sharePost('Soirée Ambiance Congo AYALA !')" class="flex flex-col items-center text-white">
+                <div class="w-12 h-12 rounded-full bg-slate-900/60 backdrop-blur-md flex items-center justify-center text-2xl">
+                  <i class="ph-bold ph-share-network text-white"></i>
+                </div>
+                <span class="text-xs font-bold mt-1">Partager</span>
+              </button>
+            </div>
+
+            <!-- Overlay Info -->
+            <div class="absolute left-4 bottom-8 right-16 z-10 text-white">
+              <div class="flex items-center space-x-2 mb-2">
+                <span class="text-sm font-extrabold text-ayala-red">Danny OYO-AYALA</span>
+                <span class="bg-ayala-green text-slate-950 font-bold text-[10px] px-2 py-0.5 rounded-full">Suivi</span>
+              </div>
+              <p class="text-xs text-slate-200 line-clamp-2">Lancement officiel de l'application AYALA à Brazzaville ! 🇨🇬🔥 #AyalaCongo #Innovation</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. LIVE STREAM TAB -->
+      <section id="tab-live" class="tab-content hidden h-full relative bg-slate-950">
+        <div class="relative w-full h-[calc(100vh-140px)] rounded-2xl overflow-hidden bg-slate-900 flex flex-col justify-between p-4">
+          
+          <!-- Background Stream Simulation -->
+          <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Live Camera Stream">
+          <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/90"></div>
+
+          <!-- Live Top Info Bar -->
+          <div class="relative z-10 flex items-center justify-between">
+            <div class="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md p-1.5 rounded-full border border-slate-800">
+              <div class="w-9 h-9 rounded-full flag-gradient p-0.5">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full" alt="Host">
+              </div>
+              <div class="pr-2">
+                <p class="text-xs font-black text-ayala-red">Danny OYO-AYALA</p>
+                <p class="text-[10px] text-ayala-yellow font-bold">Fondateur AYALA</p>
+              </div>
+              <button class="bg-ayala-green text-slate-950 text-xs font-black px-3 py-1 rounded-full">+ Suivre</button>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="bg-ayala-red text-white text-xs font-black px-2.5 py-1 rounded-full animate-pulse flex items-center">
+                <span class="w-2 h-2 rounded-full bg-white mr-1.5"></span> LIVE
+              </span>
+              <span class="bg-slate-900/80 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full border border-slate-800 font-bold">
+                👁️ 12.8K
+              </span>
+            </div>
+          </div>
+
+          <!-- Hearts Floating Animation Area -->
+          <div id="liveHeartsContainer" class="absolute right-6 bottom-24 w-16 h-64 pointer-events-none z-10"></div>
+
+          <!-- Live Chat Overlay -->
+          <div class="relative z-10 flex flex-col justify-end h-48 max-w-[80%] space-y-2 overflow-y-auto no-scrollbar" id="liveChatMessages">
+            <div class="bg-slate-950/60 backdrop-blur-md p-2 rounded-xl text-xs">
+              <span class="font-bold text-ayala-yellow">Grace M. :</span> Félicitations pour AYALA ! 🎉
+            </div>
+            <div class="bg-slate-950/60 backdrop-blur-md p-2 rounded-xl text-xs">
+              <span class="font-bold text-ayala-red">Prince B. :</span> La qualité vidéo est incroyable ! 🔥
+            </div>
+          </div>
+
+          <!-- Live Controls Bottom Bar -->
+          <div class="relative z-10 flex items-center space-x-2 mt-2">
+            <input type="text" id="liveChatInput" placeholder="Envoyer un message..." class="flex-1 bg-slate-900/90 border border-slate-700 rounded-full px-4 py-2 text-xs text-white focus:outline-none focus:border-ayala-green">
+            <button onclick="sendLiveMessage()" class="p-2.5 rounded-full bg-ayala-green text-slate-950 font-bold">
+              <i class="ph-bold ph-paper-plane-right text-lg"></i>
+            </button>
+            <button onclick="spawnLiveHeart()" class="p-2.5 rounded-full bg-ayala-red text-white font-bold shadow-lg shadow-ayala-red/50 animate-bounce">
+              <i class="ph-fill ph-heart text-lg"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. CHATS & MESSAGES TAB -->
+      <section id="tab-chats" class="tab-content hidden p-4 space-y-3">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="text-base font-bold text-white">Discussions Instantanées</h2>
+          <button onclick="startCall('Danny OYO-AYALA', 'audio')" class="text-xs bg-ayala-green/20 text-ayala-green px-3 py-1 rounded-full font-bold border border-ayala-green/30 flex items-center space-x-1">
+            <i class="ph-bold ph-phone"></i>
+            <span>Nouvel Appel</span>
+          </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative">
+          <i class="ph-bold ph-magnifying-glass absolute left-3 top-3 text-slate-500"></i>
+          <input type="text" placeholder="Rechercher un ami ou une discussion..." class="w-full bg-slate-900 border border-ayala-border rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-ayala-green">
+        </div>
+
+        <!-- Chat Items -->
+        <div class="space-y-2 pt-2">
+          <!-- Chat 1 -->
+          <div onclick="openDirectChat('Danny OYO-AYALA')" class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800 flex items-center justify-between cursor-pointer hover:border-ayala-green transition-all">
+            <div class="flex items-center space-x-3">
+              <div class="relative w-12 h-12 rounded-full flag-gradient p-0.5">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full" alt="User">
+                <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-ayala-green rounded-full border-2 border-slate-950"></span>
+              </div>
+              <div>
+                <h3 class="text-sm font-extrabold text-ayala-red">Danny OYO-AYALA</h3>
+                <p class="text-xs text-slate-400 line-clamp-1">Bienvenue sur la plateforme AYALA ! 🚀</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] text-slate-500">14:32</span>
+              <span class="block w-4 h-4 bg-ayala-red text-white text-[9px] font-bold rounded-full text-center leading-4 ml-auto mt-1">1</span>
+            </div>
+          </div>
+
+          <!-- Chat 2 -->
+          <div onclick="openDirectChat('Grace M-Brazza')" class="bg-slate-900/60 p-3 rounded-2xl border border-slate-800 flex items-center justify-between cursor-pointer hover:border-ayala-green transition-all">
+            <div class="flex items-center space-x-3">
+              <div class="relative w-12 h-12 rounded-full bg-ayala-yellow p-0.5">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" class="w-full h-full object-cover rounded-full" alt="User">
+              </div>
+              <div>
+                <h3 class="text-sm font-extrabold text-ayala-red">Grace M-Brazza</h3>
+                <p class="text-xs text-slate-400 line-clamp-1">As-tu reçu le paiement Mobile Money ?</p>
+              </div>
+            </div>
+            <span class="text-[10px] text-slate-500">Hier</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PROFILE & SETTINGS TAB -->
+      <section id="tab-profile" class="tab-content hidden p-4 space-y-4">
+        <!-- Profile Banner Card -->
+        <div class="bg-slate-900 rounded-3xl border border-ayala-border p-5 text-center relative overflow-hidden">
+          <div class="h-20 flag-gradient absolute top-0 left-0 right-0 opacity-30"></div>
+          
+          <div class="relative z-10">
+            <div class="w-24 h-24 mx-auto rounded-full flag-gradient p-1 shadow-xl mb-3">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full border-2 border-slate-950" alt="Avatar">
+            </div>
+
+            <h2 class="text-xl font-black text-ayala-red tracking-wide">Danny OYO-AYALA</h2>
+            <p class="text-xs text-ayala-yellow font-semibold">@danny_ayala_official</p>
+            <p class="text-xs text-slate-400 mt-2 max-w-xs mx-auto">Fondateur & Créateur de la plateforme AYALA Congo 🇨🇬</p>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-2 my-4 py-3 border-y border-slate-800">
+              <div>
+                <span class="block text-base font-black text-white">128K</span>
+                <span class="text-[10px] text-slate-400 font-medium uppercase">Abonnés</span>
+              </div>
+              <div>
+                <span class="block text-base font-black text-white">450</span>
+                <span class="text-[10px] text-slate-400 font-medium uppercase">Abonnements</span>
+              </div>
+              <div>
+                <span class="block text-base font-black text-ayala-green">1.2M</span>
+                <span class="text-[10px] text-slate-400 font-medium uppercase">J'aime</span>
+              </div>
+            </div>
+
+            <!-- Profile Actions -->
+            <div class="flex items-center justify-center space-x-2">
+              <button onclick="openModal('premiumModal')" class="flex-1 bg-gradient-to-r from-ayala-green to-emerald-600 text-slate-950 font-black py-2.5 px-4 rounded-xl text-xs shadow-lg shadow-ayala-green/20">
+                Abonnement AYALA VIP
+              </button>
+              <button class="bg-slate-800 text-white p-2.5 rounded-xl border border-slate-700">
+                <i class="ph-bold ph-gear text-lg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Options -->
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 overflow-hidden text-xs font-semibold">
+          <div onclick="openModal('premiumModal')" class="p-3.5 flex items-center justify-between border-b border-slate-800 cursor-pointer hover:bg-slate-800/50">
+            <div class="flex items-center space-x-3 text-ayala-yellow">
+              <i class="ph-fill ph-crown text-lg"></i>
+              <span>Grille Tarifaire & Premium</span>
+            </div>
+            <i class="ph-bold ph-caret-right text-slate-500"></i>
+          </div>
+
+          <div class="p-3.5 flex items-center justify-between border-b border-slate-800 cursor-pointer hover:bg-slate-800/50">
+            <div class="flex items-center space-x-3 text-slate-300">
+              <i class="ph-bold ph-wallet text-lg text-ayala-green"></i>
+              <span>Portefeuille Mobile Money (MTN / Airtel)</span>
+            </div>
+            <i class="ph-bold ph-caret-right text-slate-500"></i>
+          </div>
+
+          <div class="p-3.5 flex items-center justify-between border-b border-slate-800 cursor-pointer hover:bg-slate-800/50">
+            <div class="flex items-center space-x-3 text-slate-300">
+              <i class="ph-bold ph-shield-check text-lg text-blue-400"></i>
+              <span>Sécurité & Confidentialité</span>
+            </div>
+            <i class="ph-bold ph-caret-right text-slate-500"></i>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION BAR (TABS) -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-lg border-t border-ayala-border py-2 px-4 flex items-center justify-between z-40">
+      <button onclick="switchTab('feed')" id="nav-feed" class="nav-btn flex flex-col items-center text-ayala-green font-bold">
+        <i class="ph-bold ph-house text-xl"></i>
+        <span class="text-[10px] mt-0.5">Accueil</span>
+      </button>
+
+      <button onclick="switchTab('reels')" id="nav-reels" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white font-medium">
+        <i class="ph-bold ph-film-strip text-xl"></i>
+        <span class="text-[10px] mt-0.5">Réels</span>
+      </button>
+
+      <button onclick="switchTab('live')" id="nav-live" class="nav-btn flex flex-col items-center text-ayala-red font-bold animate-pulse">
+        <div class="w-9 h-9 rounded-full bg-ayala-red text-white flex items-center justify-center shadow-lg shadow-ayala-red/40 -mt-4 border-2 border-slate-950">
+          <i class="ph-bold ph-broadcast text-lg"></i>
+        </div>
+        <span class="text-[10px] mt-0.5">LIVE</span>
+      </button>
+
+      <button onclick="switchTab('chats')" id="nav-chats" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white font-medium">
+        <i class="ph-bold ph-chat-circle-dots text-xl"></i>
+        <span class="text-[10px] mt-0.5">Chats</span>
+      </button>
+
+      <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center text-slate-400 hover:text-white font-medium">
+        <i class="ph-bold ph-user text-xl"></i>
+        <span class="text-[10px] mt-0.5">Profil</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <!-- MODALS CONTAINER -->
+
+  <!-- 1. CREATE POST MODAL -->
+  <div id="createPostModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 w-full max-w-sm rounded-3xl border border-ayala-border p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-sm font-black text-white">Nouveau Post AYALA</h3>
+        <button onclick="closeModal('createPostModal')" class="text-slate-400 hover:text-white text-xl">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <textarea id="postContentInput" rows="4" placeholder="Qu'avez-vous en tête ?" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs text-white focus:outline-none focus:border-ayala-green resize-none"></textarea>
+
+      <div class="flex items-center space-x-2">
+        <input type="text" id="postImageInput" placeholder="URL de la photo ou vidéo (Optionnel)" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white">
+      </div>
+
+      <button onclick="publishNewPost()" class="w-full bg-ayala-green text-slate-950 font-black py-3 rounded-2xl text-xs shadow-lg shadow-ayala-green/30">
+        Publier sur AYALA
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. PREMIUM PRICING & PAYMENT MODAL -->
+  <div id="premiumModal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-slate-900 w-full max-w-sm rounded-3xl border border-ayala-yellow p-5 space-y-4 shadow-2xl relative my-auto">
+      <button onclick="closeModal('premiumModal')" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+        <i class="ph-bold ph-x"></i>
+      </button>
+
+      <div class="text-center">
+        <div class="w-12 h-12 bg-ayala-yellow/20 text-ayala-yellow rounded-full flex items-center justify-center mx-auto mb-2 text-2xl">
+          <i class="ph-fill ph-crown"></i>
+        </div>
+        <h3 class="text-lg font-black text-white">Grille Tarifaire AYALA VIP</h3>
+        <p class="text-xs text-slate-400">Débloquez le streaming 4K et le badge officiel</p>
+      </div>
+
+      <!-- Pricing Plans -->
+      <div class="space-y-2">
+        <div onclick="selectPlan('mensuel', 2500)" class="plan-card bg-slate-950 p-3 rounded-2xl border-2 border-ayala-green cursor-pointer">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white">Abonnement Mensuel</span>
+            <span class="text-xs font-black text-ayala-green">2 500 FCFA / mois</span>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Badge VIP + Streaming HD/4K + Sans pub</p>
+        </div>
+
+        <div onclick="selectPlan('annuel', 24000)" class="plan-card bg-slate-950 p-3 rounded-2xl border border-slate-800 cursor-pointer hover:border-ayala-yellow">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white">Pass Annuel (Économisez 20%)</span>
+            <span class="text-xs font-black text-ayala-yellow">24 000 FCFA / an</span>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-1">Tous les avantages + 2 mois gratuits</p>
+        </div>
+      </div>
+
+      <!-- Payment Methods -->
+      <div class="pt-2">
+        <p class="text-xs font-bold text-slate-300 mb-2">Choisir le moyen de paiement :</p>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="processPayment('MTN Mobile Money')" class="bg-amber-500/10 border border-amber-500/30 text-amber-400 p-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1">
+            <i class="ph-bold ph-phone"></i>
+            <span>MTN MoMo</span>
+          </button>
+          <button onclick="processPayment('Airtel Money')" class="bg-red-500/10 border border-red-500/30 text-red-400 p-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1">
+            <i class="ph-bold ph-cell-tower"></i>
+            <span>Airtel Money</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. AUDIO / VIDEO CALL MODAL -->
+  <div id="callModal" class="fixed inset-0 bg-slate-950 z-50 hidden flex flex-col items-center justify-between p-8">
+    <div class="text-center mt-12">
+      <div class="w-28 h-28 rounded-full flag-gradient p-1 mx-auto mb-4 animate-pulse shadow-2xl shadow-ayala-green/50">
+        <img id="callAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" class="w-full h-full object-cover rounded-full" alt="Call User">
+      </div>
+      <h3 id="callUserName" class="text-xl font-black text-ayala-red">Danny OYO-AYALA</h3>
+      <p id="callStatus" class="text-xs text-ayala-yellow font-bold mt-1">Appel sécurisé AYALA en cours...</p>
+    </div>
+
+    <!-- Call Controls -->
+    <div class="flex items-center space-x-6 mb-12">
+      <button onclick="toggleCallControl(this)" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-700 text-white text-xl flex items-center justify-center">
+        <i class="ph-bold ph-microphone"></i>
+      </button>
+
+      <button onclick="endCall()" class="w-16 h-16 rounded-full bg-ayala-red text-white text-2xl flex items-center justify-center shadow-lg shadow-ayala-red/50">
+        <i class="ph-bold ph-phone-disconnect"></i>
+      </button>
+
+      <button onclick="toggleCallControl(this)" class="w-14 h-14 rounded-full bg-slate-900 border border-slate-700 text-white text-xl flex items-center justify-center">
+        <i class="ph-bold ph-video-camera"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC & STATE MANAGEMENT -->
+  <script>
+    // INITIAL STATE & DEMO DATA
+    const state = {
+      currentUser: {
+        name: 'Danny OYO-AYALA',
+        tag: '@danny_ayala_official',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80',
+        isVip: true
+      },
+      posts: [
+        {
+          id: 'post_1',
+          author: 'Danny OYO-AYALA',
+          tag: '@danny_ayala_official',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80',
+          time: 'Il y a 10 min',
+          text: 'Bienvenue sur la version officielle d\'AYALA ! La plateforme réseau social conçue pour le Congo et l\'Afrique. 🇨🇬🎉',
+          image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80',
+          likes: 342,
+          comments: 28,
+          isLiked: false
+        },
+        {
+          id: 'post_2',
+          author: 'Grace M-Brazza',
+          tag: '@grace_m',
+          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80',
+          time: 'Il y a 1 heure',
+          text: 'Test de la messagerie instantanée sur AYALA, c\'est ultra fluide et rapide ! Bravo au fondateur.',
+          image: null,
+          likes: 89,
+          comments: 5,
+          isLiked: false
+        }
+      ]
+    };
+
+    // WINDOW LOAD INITIALIZATION
+    window.onload = function() {
+      // Hide Splash Screen after 2.5 seconds
+      setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.style.opacity = '0';
+        setTimeout(() => splash.remove(), 700);
+      }, 2500);
+
+      renderPosts();
+    };
+
+    // TAB SWITCHING SYSTEM
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+
+      // Update Nav Buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-ayala-green');
+        btn.classList.add('text-slate-400');
+      });
+
+      const activeNav = document.getElementById('nav-' + tabName);
+      if(activeNav && tabName !== 'live') {
+        activeNav.classList.add('text-ayala-green');
+        activeNav.classList.remove('text-slate-400');
+      }
+    }
+
+    // RENDER POSTS FEED
+    function renderPosts() {
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '';
+
+      state.posts.forEach(post => {
+        const postEl = document.createElement('div');
+        postEl.className = 'bg-slate-900 border border-ayala-border rounded-3xl p-4 space-y-3';
+        postEl.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full flag-gradient p-0.5">
+                <img src="${post.avatar}" class="w-full h-full object-cover rounded-full" alt="${post.author}">
+              </div>
+              <div>
+                <h3 class="text-xs font-black text-ayala-red">${post.author}</h3>
+                <span class="text-[10px] text-slate-400">${post.time}</span>
+              </div>
+            </div>
+            <button class="text-slate-500 hover:text-white"><i class="ph-bold ph-dots-three-vertical"></i></button>
+          </div>
+
+          <p class="text-xs text-slate-200 leading-relaxed">${post.text}</p>
+
+          ${post.image ? `<img src="${post.image}" class="w-full h-48 object-cover rounded-2xl" alt="Post attachment">` : ''}
+
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-xs font-semibold">
+            <button onclick="toggleLike('${post.id}')" class="flex items-center space-x-1.5 ${post.isLiked ? 'text-ayala-red' : 'text-slate-400 hover:text-white'}">
+              <i class="ph-${post.isLiked ? 'fill' : 'bold'} ph-heart text-base"></i>
+              <span>${post.likes}</span>
+            </button>
+
+            <button onclick="openCommentsModal('${post.id}')" class="flex items-center space-x-1.5 text-slate-400 hover:text-white">
+              <i class="ph-bold ph-chat-circle text-base"></i>
+              <span>${post.comments}</span>
+            </button>
+
+            <button onclick="sharePost('${post.text}')" class="flex items-center space-x-1.5 text-slate-400 hover:text-white">
+              <i class="ph-bold ph-share-network text-base"></i>
+              <span>Partager</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(postEl);
+      });
+    }
+
+    // LIKE TOGGLE LOGIC
+    function toggleLike(postId) {
+      const post = state.posts.find(p => p.id === postId);
+      if(post) {
+        post.isLiked = !post.isLiked;
+        post.likes += post.isLiked ? 1 : -1;
+        renderPosts();
+      }
+    }
+
+    // PUBLISH NEW POST
+    function publishNewPost() {
+      const text = document.getElementById('postContentInput').value.trim();
+      const image = document.getElementById('postImageInput').value.trim();
+
+      if(!text) return;
+
+      const newPost = {
+        id: 'post_' + Date.now(),
+        author: state.currentUser.name,
+        tag: state.currentUser.tag,
+        avatar: state.currentUser.avatar,
+        time: 'À l\'instant',
+        text: text,
+        image: image || null,
+        likes: 0,
+        comments: 0,
+        isLiked: false
+      };
+
+      state.posts.unshift(newPost);
+      renderPosts();
+      closeModal('createPostModal');
+      document.getElementById('postContentInput').value = '';
+      document.getElementById('postImageInput').value = '';
+    }
+
+    // LIVE INTERACTION: SPAWN HEARTS
+    function spawnLiveHeart() {
+      const container = document.getElementById('liveHeartsContainer');
+      const heart = document.createElement('div');
+      heart.className = 'heart-animation text-2xl text-ayala-red';
+      heart.style.left = Math.random() * 40 + 'px';
+      heart.innerHTML = '<i class="ph-fill ph-heart"></i>';
+      container.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 2000);
+    }
+
+    // SEND LIVE CHAT MESSAGE
+    function sendLiveMessage() {
+      const input = document.getElementById('liveChatInput');
+      const text = input.value.trim();
+      if(!text) return;
+
+      const chatContainer = document.getElementById('liveChatMessages');
+      const msg = document.createElement('div');
+      msg.className = 'bg-slate-950/60 backdrop-blur-md p-2 rounded-xl text-xs';
+      msg.innerHTML = `<span class="font-bold text-ayala-green">Moi :</span> ${text}`;
+      chatContainer.appendChild(msg);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      input.value = '';
+    }
+
+    // CALL SYSTEM SIMULATION
+    function startCall(userName, type) {
+      document.getElementById('callUserName').innerText = userName;
+      document.getElementById('callModal').classList.remove('hidden');
+    }
+
+    function endCall() {
+      document.getElementById('callModal').classList.add('hidden');
+    }
+
+    // MODAL HELPERS
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function processPayment(method) {
+      alert(`Paiement de l'abonnement AYALA Premium via ${method} initié avec succès !`);
+      closeModal('premiumModal');
+    }
+
+    function sharePost(text) {
+      if(navigator.share) {
+        navigator.share({ title: 'AYALA Social', text: text });
+      } else {
+        alert('Lien de partage copié dans le presse-papier !');
+      }
+    }
+  </script>
+</body>
+</html>
