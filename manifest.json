@@ -1,0 +1,12 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "AYALA",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "AYALA",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "description": "Super App AYALA"
+}
